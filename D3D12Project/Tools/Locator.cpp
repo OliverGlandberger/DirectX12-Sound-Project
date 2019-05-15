@@ -7,3 +7,4 @@ ID3D12GraphicsCommandList3** Locator::gCommandList = nullptr;
 ID3D12CommandAllocator** Locator::gCommandAllocator = nullptr;
 ID3D12CommandQueue** Locator::gCommandQueue = nullptr;
 Benchmark** Locator::m_benchmark = nullptr;
+SoundManager** Locator::m_soundManager = nullptr;

@@ -3,6 +3,7 @@
 #include "../D3D12/D3D12Renderer.h"
 #include "Benchmark.h"
 #include <d3dcompiler.h>
+#include "SoundManager.hpp"
 
 #include <dxgi1_6.h>
 
@@ -37,6 +38,7 @@ private:
 	static ID3D12CommandAllocator** gCommandAllocator;
 	static ID3D12CommandQueue** gCommandQueue;
 	static Benchmark** m_benchmark;
+	static SoundManager** m_soundManager;
 
 public:
 	Locator() {}
@@ -66,6 +68,10 @@ public:
 		m_benchmark = benchmark;
 	}
 
+	static void provide(SoundManager** soundManager) {
+		m_soundManager = soundManager;
+	}
+
 	// GET
 	static ID3D12RootSignature* getRootSignature() {
 		return *gRootSignature;
@@ -87,5 +93,8 @@ public:
 	}
 	static Benchmark* getBenchmark() {
 		return *m_benchmark;
+	}
+	static SoundManager* getSoundManager() {
+		return *m_soundManager;
 	}
 };
