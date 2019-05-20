@@ -7,8 +7,8 @@
 class D3D12VertexBuffer  {
 private:
 
-	ID3D12Device4 *m_device;
-	ID3D12GraphicsCommandList3*	m_commandList4;
+	ID3D12Device3 *m_device;
+	ID3D12GraphicsCommandList2*	m_commandList4;
 
 	size_t m_bufferSize;
 	//DATA_USAGE m_usage;

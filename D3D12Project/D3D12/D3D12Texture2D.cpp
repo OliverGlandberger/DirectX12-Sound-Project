@@ -4,7 +4,7 @@
 
 #include "../Tools/Locator.h"
 
-#include "../../include/d3dx12.h"
+#include <d3dx12.h>
 
 /////////////////////////////////
 
@@ -300,7 +300,7 @@ int D3D12Texture2D::loadFromFile(std::string fileName)
 void D3D12Texture2D::bind(unsigned int slot)
 {
 	// Fetch commandlist so that we can attach commands to it
-	ID3D12GraphicsCommandList3* pCommandList = Locator::getCommandList();
+	ID3D12GraphicsCommandList2* pCommandList = Locator::getCommandList();
 	// Set SRV's Description Heap
 	ID3D12DescriptorHeap* ppHeaps[] = { m_srvHeap.Get() };
 	pCommandList->SetDescriptorHeaps(ARRAYSIZE(ppHeaps), ppHeaps);

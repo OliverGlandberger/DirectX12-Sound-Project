@@ -1,7 +1,8 @@
 #ifndef SOUND_MANAGER_HPP
 #define SOUND_MANAGER_HPP
 
-#include "../include/FMOD Studio API Windows/api/lowlevel/inc/fmod.hpp"
+#include <fmod.hpp>
+//#include "../../include/D3D/"
 
 class SoundManager
 {

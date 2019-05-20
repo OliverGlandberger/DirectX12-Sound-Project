@@ -26,12 +26,12 @@ public:
 
 private:
 	const unsigned int m_frameCount = BACKBUFFERCOUNT;
-	ID3D12Device4 *m_device;
+	ID3D12Device3 *m_device;
 	IDXGISwapChain3 *m_swapChain;
 
 	ID3D12DescriptorHeap* m_descriptorHeap[BACKBUFFERCOUNT] = {};
 	ID3D12Resource1* m_constantBufferResource[BACKBUFFERCOUNT] = {};
-	ID3D12GraphicsCommandList3*	m_commandList4;
+	ID3D12GraphicsCommandList2*	m_commandList4;
 
 	std::string m_name;
 	unsigned int m_location;

@@ -95,8 +95,12 @@
     <ClInclude Include="Tools\Locator.h" />
     <ClInclude Include="Tools\GpuClock.h" />
     <ClInclude Include="Tools\SoundManager.hpp" />
+    <ClInclude Include="Camera\Camera.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Guides\HowToCommandListsAndBundles.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Camera\Camera.cpp" />
   </ItemGroup>
 </Project>

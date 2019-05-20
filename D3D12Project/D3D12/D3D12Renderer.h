@@ -3,8 +3,8 @@
 #pragma region includes
 #include <iostream>
 #include <windows.h>
-#include <d3d12.h>
 
+#include <d3d12.h>
 #include <dxgi1_6.h> //Only used for initialization of the device and swap chain.
 #include <d3dcompiler.h>
 
@@ -70,8 +70,8 @@ private:
 	/////////////////////////
 	D3D12_STATIC_SAMPLER_DESC	m_samplerDesc;
 
-	ID3D12Device4*				m_device5 = nullptr;
-	ID3D12GraphicsCommandList3*	m_commandList4 = nullptr;
+	ID3D12Device3*				m_device5 = nullptr;
+	ID3D12GraphicsCommandList2*	m_commandList4 = nullptr;
 
 	ID3D12CommandQueue*			m_commandQueue = nullptr;
 	ID3D12CommandAllocator*		m_commandAllocators[BACKBUFFERCOUNT];
@@ -107,11 +107,11 @@ private:
 	ID3D12PipelineState* m_queryState;
 	ID3D12Resource* m_queryResourceCPU;
 	ID3D12Resource* m_queryResourceGPU;
-	void startGpuTimer(ID3D12GraphicsCommandList3* commandList, UINT timeStampID);
-	void stopGpuTimer(ID3D12GraphicsCommandList3* commandList, UINT timeStampID);
+	void startGpuTimer(ID3D12GraphicsCommandList2* commandList, UINT timeStampID);
+	void stopGpuTimer(ID3D12GraphicsCommandList2* commandList, UINT timeStampID);
 	void resolveQueryToCPU(ID3D12GraphicsCommandList* commandList, UINT timeStampID);
-	void resolveQueryToGPU(ID3D12GraphicsCommandList3* commandList, ID3D12Resource** ppQueryResourceGPUOut);
-	void setGPUResourceState(ID3D12GraphicsCommandList3 * commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
+	void resolveQueryToGPU(ID3D12GraphicsCommandList2* commandList, ID3D12Resource** ppQueryResourceGPUOut);
+	void setGPUResourceState(ID3D12GraphicsCommandList2 * commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after);
 	GPUTimeStamp getGPUTimeStamp(UINT timeStampID);
 	
 

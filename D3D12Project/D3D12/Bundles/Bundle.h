@@ -19,7 +19,7 @@ private:
 	void clean();
 
 protected:
-	ID3D12GraphicsCommandList3*	bundle = nullptr;
+	ID3D12GraphicsCommandList2*	bundle = nullptr;
 	// OBS! Not independent! rootIndex is semi-hardcoded!
 	void bindConstantBuffer(
 		int backBufferIndex,
@@ -40,6 +40,6 @@ public:
 
 	// OBS! Bundle should be closed after it has been populated
 	virtual void populateBundle(void* inputData) = 0;
-	void reset(ID3D12GraphicsCommandList3* mainCommandList, ID3D12PipelineState* pipeLineState);
-	void appendBundleToCommandList(ID3D12GraphicsCommandList3* mainCommandList);
+	void reset(ID3D12GraphicsCommandList2* mainCommandList, ID3D12PipelineState* pipeLineState);
+	void appendBundleToCommandList(ID3D12GraphicsCommandList2* mainCommandList);
 };

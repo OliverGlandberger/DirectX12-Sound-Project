@@ -32,9 +32,9 @@ inline void ThrowIfFailed(HRESULT hr) {
 class Locator {
 private:
 	static ID3D12RootSignature** gRootSignature;
-	static ID3D12Device4** gDevice;
+	static ID3D12Device3** gDevice;
 	static IDXGISwapChain4** gSwapChain;
-	static ID3D12GraphicsCommandList3** gCommandList;
+	static ID3D12GraphicsCommandList2** gCommandList;
 	static ID3D12CommandAllocator** gCommandAllocator;
 	static ID3D12CommandQueue** gCommandQueue;
 	static Benchmark** m_benchmark;
@@ -48,13 +48,13 @@ public:
 	static void provide(ID3D12RootSignature** rootSignature) {
 		gRootSignature = rootSignature;
 	}
-	static void provide(ID3D12Device4** device) {
+	static void provide(ID3D12Device3** device) {
 		gDevice = device;
 	}
 	static void provide(IDXGISwapChain4** swapChain) {
 		gSwapChain = swapChain;
 	}
-	static void provide(ID3D12GraphicsCommandList3** commandList) {
+	static void provide(ID3D12GraphicsCommandList2** commandList) {
 		gCommandList = commandList;
 	}
 	static void provide(ID3D12CommandAllocator** commandAllocator) {
@@ -76,13 +76,13 @@ public:
 	static ID3D12RootSignature* getRootSignature() {
 		return *gRootSignature;
 	}
-	static ID3D12Device4* getDevice() {
+	static ID3D12Device3* getDevice() {
 		return *gDevice;
 	}
 	static IDXGISwapChain4* getSwapChain() {
 		return *gSwapChain;
 	}
-	static ID3D12GraphicsCommandList3* getCommandList() {
+	static ID3D12GraphicsCommandList2* getCommandList() {
 		return *gCommandList;
 	}
 	static ID3D12CommandAllocator* getCommandAllocator() {

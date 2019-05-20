@@ -12,6 +12,7 @@
 #include "D3D12Texture2D.h"
 
 #include <d3dx12.h>
+#include <dxgi1_6.h>
 
 #include "../IA.h"
 
@@ -41,11 +42,11 @@ LRESULT CALLBACK wndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 +-+-+-+-+-+-+-+-+-+-+-+*/
 
 #pragma region SetResourceTransitionBarrier
-void D3D12Renderer::startGpuTimer(ID3D12GraphicsCommandList3* commandList, UINT timeStampID)
+void D3D12Renderer::startGpuTimer(ID3D12GraphicsCommandList2* commandList, UINT timeStampID)
 {
 	commandList->EndQuery(m_queryHeap, D3D12_QUERY_TYPE_TIMESTAMP, timeStampID * 2);
 }
-void D3D12Renderer::stopGpuTimer(ID3D12GraphicsCommandList3* commandList, UINT timeStampID)
+void D3D12Renderer::stopGpuTimer(ID3D12GraphicsCommandList2* commandList, UINT timeStampID)
 {
 	commandList->EndQuery(m_queryHeap, D3D12_QUERY_TYPE_TIMESTAMP, timeStampID * 2 + 1);
 }
@@ -60,7 +61,7 @@ void D3D12Renderer::resolveQueryToCPU(ID3D12GraphicsCommandList * commandList, U
 		sizeof(GPUTimeStamp) * timeStampID
 	);
 }
-void D3D12Renderer::resolveQueryToGPU(ID3D12GraphicsCommandList3 * commandList, ID3D12Resource** ppQueryResourceGPUOut)
+void D3D12Renderer::resolveQueryToGPU(ID3D12GraphicsCommandList2 * commandList, ID3D12Resource** ppQueryResourceGPUOut)
 {
 	// Set GPU Resource State
 	setGPUResourceState(
@@ -91,7 +92,7 @@ void D3D12Renderer::resolveQueryToGPU(ID3D12GraphicsCommandList3 * commandList, 
 		*ppQueryResourceGPUOut = m_queryResourceGPU;
 	}
 }
-void D3D12Renderer::setGPUResourceState(ID3D12GraphicsCommandList3 * commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
+void D3D12Renderer::setGPUResourceState(ID3D12GraphicsCommandList2 * commandList, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after)
 {
 	D3D12_RESOURCE_BARRIER barrierDesc = {};
 	barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
@@ -323,7 +324,7 @@ void D3D12Renderer::CreateDirect3DDevice(HWND wndHandle)
 #endif
 
 	//dxgi1_6 is only needed for the initialization process using the adapter.
-	IDXGIFactory6*	factory = nullptr;
+	IDXGIFactory5*	factory = nullptr;		// _VER_ used to be Factory6
 	IDXGIAdapter1*	adapter = nullptr;
 	//First a factory is created to iterate through the adapters available.
 	CreateDXGIFactory(IID_PPV_ARGS(&factory));
@@ -336,7 +337,7 @@ void D3D12Renderer::CreateDirect3DDevice(HWND wndHandle)
 		}
 
 		// Check to see if the adapter supports Direct3D 12, but don't create the actual device yet.
-		if (SUCCEEDED(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, __uuidof(ID3D12Device4), nullptr)))
+		if (SUCCEEDED(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_12_1, __uuidof(ID3D12Device3), nullptr)))
 		{
 			break;
 		}

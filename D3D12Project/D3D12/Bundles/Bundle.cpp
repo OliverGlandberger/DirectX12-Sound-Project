@@ -7,7 +7,7 @@
 Bundle::Bundle(size_t targetBufferIndex, ID3D12PipelineState* pipelineState) : FrameResource(targetBufferIndex)
 {
 	///  ------  Create Bundle Components  ------ 
-	ID3D12Device4* device = Locator::getDevice();
+	ID3D12Device3* device = Locator::getDevice();
 
 	// Create Bundle Allocator
 	ThrowIfFailed(device->CreateCommandAllocator(
@@ -102,7 +102,7 @@ void Bundle::bindTexture(ID3D12DescriptorHeap* descriptorHeap, UINT index)
 	);
 }
 
-void Bundle::reset(ID3D12GraphicsCommandList3 * mainCommandList, ID3D12PipelineState* pipeLineState)
+void Bundle::reset(ID3D12GraphicsCommandList2 * mainCommandList, ID3D12PipelineState* pipeLineState)
 {
 	//// Reset the stack
 	//ThrowIfFailed(bundleCommandAllocator->Reset());
@@ -110,7 +110,7 @@ void Bundle::reset(ID3D12GraphicsCommandList3 * mainCommandList, ID3D12PipelineS
 	//ThrowIfFailed(mainCommandList->Reset(bundleCommandAllocator, pipeLineState));
 }
 
-void Bundle::appendBundleToCommandList(ID3D12GraphicsCommandList3 * mainCommandList)
+void Bundle::appendBundleToCommandList(ID3D12GraphicsCommandList2 * mainCommandList)
 {
 	mainCommandList->ExecuteBundle(bundle);
 }
