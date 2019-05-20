@@ -1,7 +1,7 @@
 /// Renderer
 #include "D3D12/D3D12Renderer.h"
 
-/// MULTI-THREADING
+/// MULTI-THREADING`
 #include <thread>
 #include <atomic>
 #include <stdint.h>
