@@ -23,6 +23,8 @@
 
 #include "../GlobalDefines.h"
 
+#include "../Box/Box.hpp"
+
 #pragma endregion
 LRESULT CALLBACK wndProc2(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam); //Window Proc callback function
 
@@ -45,6 +47,8 @@ typedef double long dong;
 
 class D3D12Renderer{
 private:
+	int stopMovingTriangles = 0, timer = 10;
+	XMMATRIX worldMatrices[201];
 	TextureDescriptions textureDescs;
 	FrameResourceManager frameResources;
 	//OriginalBundle* testBundle = nullptr;
@@ -135,7 +139,7 @@ private:
 	float m_trigAngle = 0.0f;
 
 	//Camera
-	D3D12Camera m_camera;
+	D3D12Camera *m_camera;
 	D3D12ConstantBuffer *m_viewProjConstantBuffer;
 
 	//Benchmarking
@@ -168,6 +172,9 @@ public:
 #pragma region publicFunctions
 	D3D12Renderer();
 	~D3D12Renderer();
+
+	// Sound Project Tape
+	Box box;
 
 	//Helper function for syncronization of GPU/CPU
 	void WaitForGpu();

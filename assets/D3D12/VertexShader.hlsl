@@ -26,6 +26,5 @@ VSOut VS_main(VSIn input) {
 		
 	output.texCoord = input.texCoord;
 
-
 	return output;
 }

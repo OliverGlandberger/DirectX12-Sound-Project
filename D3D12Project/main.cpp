@@ -79,11 +79,27 @@ void run() {
 	Locator::getDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 	fenceVal = 1;
 
+	// Camera-Input-Related
+	POINT lastMouseCoordinates = { 0, 0 };
+	POINT cursorMovement = { 0, 0 };
+	D3D12Camera *camera = Locator::getCamera();
+
 	// RENDER LOOP: Entry Point
 	while (WM_QUIT != msg.message && !(msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)) {
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+
+			// Need camera here
+			cursorMovement.x = msg.pt.x - lastMouseCoordinates.x;
+			cursorMovement.y = msg.pt.y - lastMouseCoordinates.y;
+			lastMouseCoordinates = msg.pt;
+
+			camera->UpdateCamera(		// Updates the camera dependant on the character input data.
+				msg.wParam,				// msg.Wparam Contains the character of the key which was pressed.
+				cursorMovement
+			);
+
 		}
 
 		// Update SoundManager

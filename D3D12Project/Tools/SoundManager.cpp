@@ -16,9 +16,11 @@ SoundManager::SoundManager()
 	}
 	else
 	{
-		std::string fileName = "../assets/sounds/WhereAmIGoing.ogg";
-		result = this->system->createSound(fileName.c_str(), FMOD_LOOP_NORMAL, nullptr, &this->sounds[0]);
-		result = this->system->playSound(this->sounds[0], nullptr, false, nullptr);
+		if (headache) {
+			std::string fileName = "../assets/sounds/WhereAmIGoing.ogg";
+			result = this->system->createSound(fileName.c_str(), FMOD_LOOP_NORMAL, nullptr, &this->sounds[0]);
+			result = this->system->playSound(this->sounds[0], nullptr, false, nullptr);
+		}
 	}
 }
 
@@ -29,5 +31,7 @@ SoundManager::~SoundManager()
 
 void SoundManager::update()
 {
-	this->system->update();
+	if (headache) {
+		this->system->update();
+	}
 }

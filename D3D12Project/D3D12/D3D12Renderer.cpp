@@ -11,6 +11,8 @@
 #include "D3D12Sampler2D.h"
 #include "D3D12Texture2D.h"
 
+#include "../Box/Box.hpp"
+
 #include <d3dx12.h>
 #include <dxgi1_6.h>
 
@@ -846,11 +848,16 @@ int D3D12Renderer::initialiseTestbench()
 	//Camera (view and proj)
 	m_viewProjConstantBuffer = new D3D12ConstantBuffer(VIEWPROJ_NAME, PIPELINEINPUT::CB::VIEWPROJ_MATRIX);
 
-	//Define view-proj. Move this to a camera class
-	DirectX::XMMATRIX viewProj = m_camera.getViewProjection();
+	//Define view-proj. Adapted for movement
+	m_camera = new D3D12Camera();
+	Locator::provide(&m_camera);
+	DirectX::XMMATRIX viewProj = m_camera->getViewProjection();
 
 	m_viewProjConstantBuffer->setData(&viewProj, sizeof(viewProj), PIPELINEINPUT::CB::VIEWPROJ_MATRIX);
 
+	// BOX FOR SOUND PROJECT
+	this->box.initialize();
+	this->box.mesh->technique = m_techniques.at(0);
 
 	// Used to submit/clear each frame, now only submits once.
 	for (auto m : m_scene)
@@ -908,33 +915,43 @@ void D3D12Renderer::updateScene(double dt)
 	/*
 		For each mesh in scene list, update their position
 	*/
-	{
-		const int size = (int)m_scene.size();
-		for (int i = 0; i < size; i++)
+	if (stopMovingTriangles < timer) {
 		{
-			float tempAngle = m_trigAngle + i * 6.28f / (size * 2.0f + 1.0f);
-			DirectX::XMVECTOR trans{
-				1.3f * cosf(3.0f * tempAngle + 2.0f * m_trigAngle),
-				-0.6f + 0.3f * sinf(1.0f * tempAngle),
-				4.5f - i * (9.0f / size)
-			};
+			const int size = (int)m_scene.size();
+			for (int i = 0; i < size; i++)
+			{
+				float tempAngle = m_trigAngle + i * 6.28f / (size * 2.0f + 1.0f);
+				DirectX::XMVECTOR trans{
+					1.3f * cosf(3.0f * tempAngle + 2.0f * m_trigAngle),
+					-0.6f + 0.3f * sinf(1.0f * tempAngle),
+					4.5f - i * (9.0f / size)
+				};
 
-			DirectX::XMMATRIX worldMatrix;
+				DirectX::XMMATRIX worldMatrix;
 
-			worldMatrix = DirectX::XMMatrixTranslationFromVector(trans);
-			this->translationMatrices.push_back(worldMatrix);
+				worldMatrices[i] = DirectX::XMMatrixTranslationFromVector(trans);
+				this->translationMatrices.push_back(worldMatrices[i]);
+			}
 		}
 
+		m_trigAngle = (float)fmod(m_trigAngle + 1.0f, 6.28f);
+
+		//m_camera->update(dt);
+
+
+		stopMovingTriangles++;
+	} else{
+		{
+			const int size = (int)m_scene.size();
+			for (int i = 0; i < size; i++)
+			{
+				this->translationMatrices.push_back(worldMatrices[i]);
+			}
+		}
 	}
 
-	m_trigAngle = (float)fmod(m_trigAngle + dt * 1.0f, 6.28f);
-
-	m_camera.update(dt);
-
-	DirectX::XMMATRIX viewProj = m_camera.getViewProjection();
+	DirectX::XMMATRIX viewProj = m_camera->getViewProjection();
 	this->translationMatrices.push_back(viewProj);
-
-	return;
 };
 
 void D3D12Renderer::recordList()
@@ -1034,6 +1051,15 @@ void D3D12Renderer::recordList()
 				m_commandList4->DrawInstanced(3, 1, 0, 0); //3 Vertices, 1 triangle, start with vertex 0 and triangle 0
 			}
 		}
+		m_commandList4->SetGraphicsRootSignature(m_rootSignature);
+		m_commandList4->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		this->box.mesh->bindIAVertexBuffer(0);
+		this->box.mesh->bindIAVertexBuffer(1);
+		this->box.mesh->bindIAVertexBuffer(2);
+		this->box.mesh->technique->enable(this);
+		this->box.mesh->technique->getMaterial()->enable();
+		this->box.mesh->txBuffer->bind();
+		m_commandList4->DrawInstanced(box.vertices, 1, 0, 0);
 
 		/// -------------   CLOSE   ------------- ///
 		stopGpuTimer(m_commandList4, 0);		// Stop
@@ -1061,10 +1087,17 @@ void D3D12Renderer::updateMemoryGPU()
 	for (int i = 0; i < (this->translationMatrices.size() - 1); i++) {
 		m_scene.at(i)->txBuffer->setData(&this->translationMatrices.at(i), sizeof(this->translationMatrices.at(i)), PIPELINEINPUT::CB::TRANSLATION_MATRIX);
 	}
-	m_viewProjConstantBuffer->setData(&(this->translationMatrices.at(this->translationMatrices.size() - 1)), sizeof((this->translationMatrices.at(this->translationMatrices.size() - 1))), PIPELINEINPUT::CB::VIEWPROJ_MATRIX);
-
+	m_viewProjConstantBuffer->setData(
+		&(this->translationMatrices.at(this->translationMatrices.size() - 1)),
+		sizeof((this->translationMatrices.at(this->translationMatrices.size() - 1))),
+		PIPELINEINPUT::CB::VIEWPROJ_MATRIX
+	);
 	this->translationMatrices.clear();
 	this->translationMatrices.resize(0);
+	
+
+
+	// --------------------
 }
 
 void D3D12Renderer::present()

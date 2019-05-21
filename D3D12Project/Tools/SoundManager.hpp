@@ -9,6 +9,7 @@ class SoundManager
 private:
 	FMOD::System *system = nullptr;
 	FMOD::Sound *sounds[4];
+	bool headache = false;
 
 public:
 	SoundManager();

@@ -4,6 +4,7 @@
 #include "Benchmark.h"
 #include <d3dcompiler.h>
 #include "SoundManager.hpp"
+#include "../D3D12/D3D12Camera.h"
 
 #include <dxgi1_6.h>
 
@@ -39,6 +40,7 @@ private:
 	static ID3D12CommandQueue** gCommandQueue;
 	static Benchmark** m_benchmark;
 	static SoundManager** m_soundManager;
+	static D3D12Camera** m_camera;
 
 public:
 	Locator() {}
@@ -72,6 +74,10 @@ public:
 		m_soundManager = soundManager;
 	}
 
+	static void provide(D3D12Camera** camera) {
+		m_camera = camera;
+	}
+
 	// GET
 	static ID3D12RootSignature* getRootSignature() {
 		return *gRootSignature;
@@ -96,5 +102,8 @@ public:
 	}
 	static SoundManager* getSoundManager() {
 		return *m_soundManager;
+	}
+	static D3D12Camera* getCamera() {
+		return *m_camera;
 	}
 };

@@ -10,9 +10,12 @@ class D3D12Camera {
 private:
 	//View
 	XMVECTOR m_cameraPos;
-	XMVECTOR m_focusPoint;
+	XMVECTOR cameraDirection = {
+	
+	};
 	XMVECTOR m_cameraUp;
 	XMMATRIX m_viewMatrix;
+	
 
 	//Projection
 	float m_fov;
@@ -27,14 +30,33 @@ private:
 	//Update
 	float m_trigAngle;
 
+	// Movement
+	float CameraMovementSpeed = 0.1f;
+	float CameraRotationSpeed = 0.002f;
+
+
 public:
 	D3D12Camera();
 	~D3D12Camera();
 
-	void setFocusPoint(XMVECTOR focusPoint);
+	void MoveCameraLeft();
+	void MoveCameraRight();
+	void MoveCameraForward();
+	void MoveCameraBackward();
+	void MoveCameraUp();
+	void RotateCameraVertically(POINT MouseMovement);
+	void RotateCameraHorizontally(POINT mouseMovement);
 
+	// Moves on input
+	void UpdateCamera(
+		TCHAR					CharacterMessage,
+		POINT					MouseCoordinates
+	);
+	// Moves statically
 	void update(float dt);
 
+	void setFocusPoint(XMVECTOR focusPoint);
+	
 	XMMATRIX getViewProjection();
 
 };
