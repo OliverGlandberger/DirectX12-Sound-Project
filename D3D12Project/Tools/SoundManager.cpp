@@ -24,7 +24,7 @@ SoundManager::SoundManager()
 		{0, 0, 1}
 	};
 	speakers[1] = new SoundStruct{
-		"../assets/sounds/TheDeli5_32PM.ogg",
+		"../assets/sounds/flutebaby.ogg",
 		nullptr,
 		nullptr,
 		{-0.0183747206f, -0.30000335f, 0.0f} ,			// Medium -0.0183747206, -0.300003350, 0.000000000,
@@ -53,6 +53,16 @@ SoundManager::SoundManager()
 			{0, 0, 1}
 		};
 	}
+	// Ambience
+	SoundStruct *ambience = new SoundStruct{
+		"../assets/sounds/RainThunder.ogg",
+		nullptr,
+		nullptr,
+		{-1.29632103f, -0.592475712f, -4.45499992f} ,// Last -1.29632103, -0.592475712, -4.45499992
+		{0.0f, 0.0f, 0.0f} ,
+		{0, 1, 0} ,
+		{0, 0, 1}
+	};
 
 	result = FMOD::System_Create(&system);
 	result = this->system->init(512, FMOD_INIT_NORMAL, 0);
@@ -96,6 +106,23 @@ SoundManager::SoundManager()
 				std::this_thread::sleep_for(std::chrono::milliseconds(400));
 			}
 		}
+
+		// Ambience
+		result = this->system->createStream(	// Stream|Sound
+			ambience->fileName.c_str(),
+			FMOD_3D,
+			nullptr,
+			&ambience->sound
+		);
+		result = this->system->playSound(		// Start Playing
+			ambience->sound,
+			nullptr,
+			false,
+			&ambience->channel
+		);
+		ambience->channel->setMode(FMOD_3D_HEADRELATIVE);
+		ambience->channel->setVolume(0.05);
+		
 	}
 }
 
