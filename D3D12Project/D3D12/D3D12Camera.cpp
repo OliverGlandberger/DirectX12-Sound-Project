@@ -112,16 +112,9 @@ void D3D12Camera::UpdateCamera(
 		
 
 		// Debug Output
-		//std::cout << "CAMPOS: " << camposOutput.x << " " << camposOutput.y << " " << camposOutput.z << "\t";
-		/*XMFLOAT3 camposOutput;
-		XMStoreFloat3(&camposOutput, m_cameraPos);
-		XMFLOAT3 camupOutput;
-		XMStoreFloat3(&camupOutput, m_cameraUp);
-		XMFLOAT3 camdirOutput;
-		XMStoreFloat3(&camdirOutput, cameraDirection);
-		
-		std::cout << "UP: " << camupOutput.x << " " << camupOutput.y << " " << camupOutput.z << "\t";
-		std::cout << "LOOK: " << camdirOutput.x << " " << camdirOutput.y << " " << camdirOutput.z << "\n";*/
+		//std::cout << "CAMPOS: " << camposOutput.x << " " << camposOutput.y << " " << camposOutput.z << "\t";		
+		//std::cout << "UP: " << camupOutput.x << " " << camupOutput.y << " " << camupOutput.z << "\t";
+		//std::cout << "LOOK: " << camdirOutput.x << " " << camdirOutput.y << " " << camdirOutput.z << "\n";*/
 	}
 }
 

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "../Tools/Locator.h"
+#include <thread>
 
 SoundManager::SoundManager()
 {
@@ -40,6 +41,18 @@ SoundManager::SoundManager()
 		{0, 1, 0} ,
 		{0, 0, 1}
 	};
+	for (size_t i = 3; i < SOUNDS; i++)
+	{
+		speakers[i] = new SoundStruct{
+			"../assets/sounds/flutebaby.ogg",
+			nullptr,
+			nullptr,
+			{15.0f, 1.7f, -3.0f} ,// Last -1.29632103, -0.592475712, -4.45499992
+			{0.0f, 0.0f, 0.0f} ,
+			{0, 1, 0} ,
+			{0, 0, 1}
+		};
+	}
 
 	result = FMOD::System_Create(&system);
 	result = this->system->init(512, FMOD_INIT_NORMAL, 0);
@@ -50,36 +63,37 @@ SoundManager::SoundManager()
 	}
 	else
 	{
-		if (headache) {
-			// System Settings
-			system->set3DListenerAttributes(
-				0,
-				&(listener->Pos),
-				&(listener->Velocity),
-				&(listener->Forward),
-				&(listener->Up)
-			);
-			system->set3DSettings(1, 1, 7);
+		// System Settings
+		system->set3DListenerAttributes(
+			0,
+			&(listener->Pos),
+			&(listener->Velocity),
+			&(listener->Forward),
+			&(listener->Up)
+		);
+		system->set3DSettings(1, 1, 7);
 
-			for (size_t i = 0; i < SOUNDS; i++)
-			{
-				result = this->system->createStream(	// Stream|Sound
-					speakers[i]->fileName.c_str(),
-					FMOD_3D,
-					nullptr,
-					&speakers[i]->sound
-				);
-				result = this->system->playSound(		// Start Playing
-					speakers[i]->sound,
-					nullptr,
-					false,
-					&speakers[i]->channel
-				);
-				speakers[i]->channel->set3DAttributes(	// Set basic Attributes
-					&speakers[i]->Pos,
-					&speakers[i]->Velocity
-				);
-				speakers[i]->channel->set3DDistanceFilter(true, 3, 2);	// Distance filter
+		for (size_t i = 0; i < SOUNDS; i++)
+		{
+			result = this->system->createStream(	// Stream|Sound
+				speakers[i]->fileName.c_str(),
+				FMOD_3D,
+				nullptr,
+				&speakers[i]->sound
+			);
+			result = this->system->playSound(		// Start Playing
+				speakers[i]->sound,
+				nullptr,
+				false,
+				&speakers[i]->channel
+			);
+			speakers[i]->channel->set3DAttributes(	// Set basic Attributes
+				&speakers[i]->Pos,
+				&speakers[i]->Velocity
+			);
+			speakers[i]->channel->set3DDistanceFilter(true, 3, 2);	// Distance filter
+			if (i >= 3) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(400));
 			}
 		}
 	}
@@ -92,17 +106,13 @@ SoundManager::~SoundManager()
 
 void SoundManager::update()
 {
-	if (headache) {
-		// Update Listener
-		system->set3DListenerAttributes(0, &listener->Pos, nullptr, nullptr, nullptr);
+	// Update Listener
+	system->set3DListenerAttributes(0, &listener->Pos, nullptr, nullptr, nullptr);
+	std::cout << "CAMPOS: " << listener->Pos.x << " " << listener->Pos.y << " " << listener->Pos.z << "\t";
 
-		//// Update Speaker0
-		//channel0->set3DAttributes()
+	//// Update Speaker0
+	//channel0->set3DAttributes()
 
-		//FMOD_VECTOR pos = listener->Pos;
-		this->system->update();
-		
-
-		//std::cout << "Current Volume: " << volume << " | ListenerPos: " << pos.x << " " << pos.y << " " << pos.z << "\n";
-	}
+	//FMOD_VECTOR pos = listener->Pos;
+	this->system->update();
 }

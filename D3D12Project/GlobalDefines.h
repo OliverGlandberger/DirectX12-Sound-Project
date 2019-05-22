@@ -12,7 +12,7 @@ typedef union {
 	struct { float u, v; };
 } float2;
 
-#define USEBUNDLES false
+#define USEBUNDLES true
 #define TRIANGLECOUNT 200
 #define BENCHMARK_BUNDLE_CREATE_AND_DESTROY false
 #define BACKBUFFERCOUNT 2

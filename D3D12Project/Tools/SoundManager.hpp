@@ -24,8 +24,6 @@ private:
 	SoundStruct* listener;
 	SoundStruct* speakers[SOUNDS];
 
-	bool headache = true;
-
 public:
 	SoundManager();
 	~SoundManager();
