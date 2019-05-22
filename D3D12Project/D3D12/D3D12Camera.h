@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 
 #include "D3D12ConstantBuffer.h"
+#include "../Tools/SoundManager.hpp"
 
 using namespace DirectX;
 
@@ -10,11 +11,12 @@ class D3D12Camera {
 private:
 	//View
 	XMVECTOR m_cameraPos;
-	XMVECTOR cameraDirection = {
-	
-	};
+	XMVECTOR cameraDirection;
 	XMVECTOR m_cameraUp;
 	XMMATRIX m_viewMatrix;
+	// SOUNDMOD
+	SoundStruct* pListener = nullptr;
+
 	
 
 	//Projection
@@ -32,7 +34,7 @@ private:
 
 	// Movement
 	float CameraMovementSpeed = 0.1f;
-	float CameraRotationSpeed = 0.002f;
+	float CameraRotationSpeed = 0.02f;
 
 
 public:

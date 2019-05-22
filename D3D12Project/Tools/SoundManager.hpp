@@ -2,18 +2,35 @@
 #define SOUND_MANAGER_HPP
 
 #include <fmod.hpp>
+#include <string>
 //#include "../../include/D3D/"
+
+#define SOUNDS 3
+
+struct SoundStruct {
+	std::string fileName = "";
+	FMOD::Sound *sound = nullptr;
+	FMOD::Channel *channel = nullptr;
+	FMOD_VECTOR Pos{ 0 };
+	FMOD_VECTOR Velocity{ 0 };
+	FMOD_VECTOR Forward{ 0 };
+	FMOD_VECTOR Up{ 0 };
+};
 
 class SoundManager
 {
 private:
 	FMOD::System *system = nullptr;
-	FMOD::Sound *sounds[4];
-	bool headache = false;
+	SoundStruct* listener;
+	SoundStruct* speakers[SOUNDS];
+
+	bool headache = true;
 
 public:
 	SoundManager();
 	~SoundManager();
+
+
 
 	void update();
 };

@@ -9,3 +9,5 @@ ID3D12CommandQueue** Locator::gCommandQueue = nullptr;
 Benchmark** Locator::m_benchmark = nullptr;
 SoundManager** Locator::m_soundManager = nullptr;
 D3D12Camera** Locator::m_camera = nullptr;
+SoundStruct** Locator::m_listener = nullptr;
+DirectX::XMMATRIX** Locator::m_worldMatrices = nullptr;

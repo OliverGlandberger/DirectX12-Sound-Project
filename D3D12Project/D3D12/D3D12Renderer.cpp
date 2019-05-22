@@ -668,6 +668,10 @@ D3D12Renderer::D3D12Renderer() {
 
 	m_recordListsID = Locator::getBenchmark()->getClockID("RecordLists");
 
+	XMMATRIX* fuckyou = worldMatrices;
+	Locator::provide(&fuckyou);
+	
+
 	for (int i = 0; i < BACKBUFFERCOUNT; i++) {
 		m_commandAllocators[i] = nullptr;
 	}
@@ -938,6 +942,9 @@ void D3D12Renderer::updateScene(double dt)
 
 		//m_camera->update(dt);
 
+		// ++		this->translationMatrices[100].r[3]	{m128_f32=0x0000014c512338f0 {-0.0183747206, -0.300003350, 0.000000000, 1.00000000} m128_u64=0x0000014c512338f0 {...} ...}	__m128
+		//+		this->translationMatrices[199].r[3]	{m128_f32=0x0000014c512351b0 {-1.29632103, -0.592475712, -4.45499992, 1.00000000} m128_u64=0x0000014c512351b0 {...} ...}	__m128
+
 
 		stopMovingTriangles++;
 	} else{
@@ -1085,7 +1092,11 @@ void D3D12Renderer::executeFrame()
 void D3D12Renderer::updateMemoryGPU()
 {
 	for (int i = 0; i < (this->translationMatrices.size() - 1); i++) {
-		m_scene.at(i)->txBuffer->setData(&this->translationMatrices.at(i), sizeof(this->translationMatrices.at(i)), PIPELINEINPUT::CB::TRANSLATION_MATRIX);
+		m_scene.at(i)->txBuffer->setData(
+			&this->translationMatrices.at(i), 
+			sizeof(this->translationMatrices.at(i)),
+			PIPELINEINPUT::CB::TRANSLATION_MATRIX
+		);
 	}
 	m_viewProjConstantBuffer->setData(
 		&(this->translationMatrices.at(this->translationMatrices.size() - 1)),
@@ -1094,7 +1105,6 @@ void D3D12Renderer::updateMemoryGPU()
 	);
 	this->translationMatrices.clear();
 	this->translationMatrices.resize(0);
-	
 
 
 	// --------------------

@@ -47,8 +47,9 @@ typedef double long dong;
 
 class D3D12Renderer{
 private:
-	int stopMovingTriangles = 0, timer = 10;
+	int stopMovingTriangles = 0, timer = 1;
 	XMMATRIX worldMatrices[201];
+	XMMATRIX *cheatptr;
 	TextureDescriptions textureDescs;
 	FrameResourceManager frameResources;
 	//OriginalBundle* testBundle = nullptr;

@@ -41,6 +41,8 @@ private:
 	static Benchmark** m_benchmark;
 	static SoundManager** m_soundManager;
 	static D3D12Camera** m_camera;
+	static SoundStruct** m_listener;
+	static DirectX::XMMATRIX** m_worldMatrices;
 
 public:
 	Locator() {}
@@ -78,6 +80,14 @@ public:
 		m_camera = camera;
 	}
 
+	static void provide(SoundStruct** listener) {
+		m_listener = listener;
+	}
+
+	static void provide(DirectX::XMMATRIX** worldMatrices) {
+		m_worldMatrices = worldMatrices;
+	}
+
 	// GET
 	static ID3D12RootSignature* getRootSignature() {
 		return *gRootSignature;
@@ -105,5 +115,11 @@ public:
 	}
 	static D3D12Camera* getCamera() {
 		return *m_camera;
+	}
+	static SoundStruct* getListener() {
+		return *m_listener;
+	}
+	static DirectX::XMMATRIX* getWorldMatrices() {
+		return *m_worldMatrices;
 	}
 };
