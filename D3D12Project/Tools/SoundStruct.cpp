@@ -1,4 +1,5 @@
 #include "SoundStruct.h"
+#include <iostream>
 
 void ValidityCheck(FMOD_RESULT result) {
 	if (result != FMOD_OK) {
@@ -6,6 +7,18 @@ void ValidityCheck(FMOD_RESULT result) {
 	}
 }
 
+
+float SoundStruct::abs(FMOD_VECTOR vector)
+{
+	float total{ 0 };
+
+	total += pow(vector.x, 2);
+	total += pow(vector.y, 2);
+	total += pow(vector.z, 2);
+	total = sqrt(total);
+
+	return total;
+}
 
 SoundStruct::SoundStruct(bool listener)
 {
@@ -49,6 +62,28 @@ void SoundStruct::play(FMOD::System *system)
 	//	&this->Pos,
 	//	&this->Velocity
 	//));
+}
+
+void SoundStruct::updateVolume(FMOD_VECTOR listenerPos)
+{
+	// Calculate distanceVector
+	FMOD_VECTOR distanceVector{ 0 };
+	distanceVector.x = listenerPos.x - Pos.x;
+	distanceVector.y = listenerPos.y - Pos.y;
+	distanceVector.z = listenerPos.z - Pos.z;
+	
+	// Calculate distance to listener
+	float distance = abs(distanceVector);
+
+	// Change current volume based on logarithmic math
+	if ((baseVolume / (distance * distanceFactor)) > 1) {
+		this->channel->setVolume(1);
+	}
+	else {
+		this->channel->setVolume(baseVolume / (distance * distanceFactor));
+	}
+
+
 }
 
 void SoundStruct::calculateStereoPan()

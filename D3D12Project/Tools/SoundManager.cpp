@@ -16,7 +16,7 @@ void SoundManager::initializeSpeakers()
 		{0, 1, 0} ,
 		{0, 0, 1}
 	};
-	if (SOUNDS > 1) {
+	if (SPEAKERS > 1) {
 		speakers[1] = new SoundStruct{
 			"../assets/sounds/flutebaby.ogg",
 			nullptr,
@@ -36,6 +36,24 @@ void SoundManager::initializeSpeakers()
 			{0, 0, 1}
 		};
 	}
+	events[0] = new SoundStruct{
+			"../assets/sounds/SeismicCharge.ogg",
+			nullptr,
+			nullptr,
+			{-1.29632103f, -0.592475712f, -4.45499992f} ,// Last -1.29632103, -0.592475712, -4.45499992
+			{0.0f, 0.0f, 0.0f} ,
+			{0, 1, 0} ,
+			{0, 0, 1}
+	};
+	events[1] = new SoundStruct{
+		"../assets/sounds/ZA_WARUDO.ogg",
+		nullptr,
+		nullptr,
+		{-1.29632103f, -0.592475712f, -4.45499992f} ,// Last -1.29632103, -0.592475712, -4.45499992
+		{0.0f, 0.0f, 0.0f} ,
+		{0, 1, 0} ,
+		{0, 0, 1}
+	};
 }
 
 void SoundManager::initializeSystem()
@@ -43,7 +61,7 @@ void SoundManager::initializeSystem()
 	ValidityCheck(FMOD::System_Create(&system));
 
 	// Disable automatic stereo panning
-	ValidityCheck(system->setSoftwareFormat(191000, FMOD_SPEAKERMODE_STEREO, SPEAKERS));
+	ValidityCheck(system->setSoftwareFormat(191000, FMOD_SPEAKERMODE_STEREO, 2));
 
 	// Set distance scaling for clearer stereo panning
 	ValidityCheck(system->set3DSettings(1, 1, 7));
@@ -54,7 +72,7 @@ void SoundManager::initializeSystem()
 
 void SoundManager::playAllSounds()
 {
-	for (size_t i = 0; i < SOUNDS; i++)
+	for (size_t i = 0; i < SPEAKERS; i++)
 	{
 		speakers[i]->play(this->system);
 	}
@@ -75,8 +93,8 @@ void SoundManager::playAmbience()
 		false,
 		&ambience->channel
 	));
-	ValidityCheck(ambience->channel->setMode(FMOD_3D_HEADRELATIVE));
-	ValidityCheck(ambience->channel->setVolume(0.05));
+	//ValidityCheck(ambience->channel->setMode(FMOD_2D_HEADRELATIVE));
+	ValidityCheck(ambience->channel->setVolume(0.005));
 }
 
 SoundManager::SoundManager()
@@ -103,11 +121,16 @@ SoundManager::SoundManager()
 	};
 
 
+
 	// Start playing all sounds
 	this->playAllSounds();
+	for (size_t i = 0; i < SPEAKERS; i++)
+	{
+		speakers[i]->channel->setVolume(0);
+	}
 
 	// Start playing Ambience
-//	this->playAmbience();
+//this->playAmbience();
 
 }
 
@@ -118,30 +141,31 @@ SoundManager::~SoundManager()
 
 void SoundManager::panRight()
 {
-	float* mixMatrix = new float[SPEAKERS * (SOUNDS +1)]{
-		0, 0,
-		0, 0
-	};
+	//float* mixMatrix = new float[SPEAKERS * (SOUNDS +1)]{
+	//	0, 0,
+	//	0, 0
+	//};
 
-	int* speakers0 = new int();
-	int* sounds0 = new int();
-	*speakers0 = SPEAKERS;
-	*sounds0 = SOUNDS;
+	//int* speakers0 = new int();
+	//int* sounds0 = new int();
+	//*speakers0 = SPEAKERS;
+	//*sounds0 = SOUNDS;
 
-	speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
-	FMOD_RESULT res = speakers[0]->channel->setPan(-1.0f);
-	speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
-	res = speakers[0]->channel->setPan(1.0f);
-	speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
+	//speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
+	//FMOD_RESULT res = speakers[0]->channel->setPan(-1.0f);
+	//speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
+//	ValidityCheck(speakers[0]->channel->setPan(1.0f));
+
+	events[1]->play(this->system);
 
 
-
-	delete mixMatrix;
+	//delete mixMatrix;
 }
 
 void SoundManager::panLeft()
 {
-	FMOD_RESULT res = speakers[0]->channel->setPan(-1.0f);
+//	ValidityCheck(speakers[0]->channel->setPan(-1.0f));
+	events[0]->play(this->system);
 }
 
 void SoundManager::update()
@@ -151,8 +175,11 @@ void SoundManager::update()
 //	std::cout << "CAMPOS: " << listener->Pos.x << " " << listener->Pos.y << " " << listener->Pos.z << "\t";
 
 
-	//// Update Speaker0
-	//channel0->set3DAttributes()
+	// Update Speakers based on distance to listener
+	for (size_t i = 0; i < SPEAKERS; i++)
+	{
+		speakers[i]->updateVolume(listener->Pos);
+	}
 
 	//FMOD_VECTOR pos = listener->Pos;
 	this->system->update();

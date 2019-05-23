@@ -8,7 +8,7 @@ void ValidityCheck(FMOD_RESULT result);
 
 class SoundStruct {
 private:
-
+	float abs(FMOD_VECTOR vector);
 
 public:
 	// Constructors
@@ -32,9 +32,13 @@ public:
 	FMOD_VECTOR Velocity{ 0 };
 	FMOD_VECTOR Forward{ 0 };
 	FMOD_VECTOR Up{ 0 };
+	float baseVolume = 1.0f;	// Fmod default value
+	float distanceFactor = 25.0f;
 
 	void play(FMOD::System *system);
-	void calculateStereoPan();
+	void updateVolume(FMOD_VECTOR listenerPos);
+	void calculateStereoPan();	// Not really implemented
+
 
 };
 

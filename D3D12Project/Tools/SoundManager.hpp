@@ -5,15 +5,16 @@
 #include <string>
 #include "SoundStruct.h"
 
-#define SOUNDS 1
-#define SPEAKERS 2
+#define EVENTS 2
+#define SPEAKERS 3
 
 class SoundManager
 {
 private:
 	FMOD::System *system = nullptr;
 	SoundStruct* listener = nullptr;
-	SoundStruct* speakers[SOUNDS]{ nullptr };
+	SoundStruct* speakers[SPEAKERS]{ nullptr };
+	SoundStruct* events[EVENTS];
 	SoundStruct* ambience = nullptr;
 
 	void initializeSpeakers();
