@@ -21,7 +21,7 @@
     <ClCompile Include="D3D12\D3D12Camera.cpp" />
     <ClCompile Include="Tools\GpuClock.cpp" />
     <ClCompile Include="Tools\SoundManager.cpp" />
-    <ClCompile Include="Box\Box.cpp" />
+    <ClCompile Include="Tools\SoundStruct.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D12\D3D12Texture2D.cpp">
@@ -97,7 +97,7 @@
     <ClInclude Include="Tools\GpuClock.h" />
     <ClInclude Include="Tools\SoundManager.hpp" />
     <ClInclude Include="Camera\Camera.hpp" />
-    <ClInclude Include="Box\Box.hpp" />
+    <ClInclude Include="Tools\SoundStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Guides\HowToCommandListsAndBundles.txt" />

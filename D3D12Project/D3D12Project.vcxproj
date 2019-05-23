@@ -169,7 +169,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Box\Box.cpp" />
     <ClCompile Include="D3D12\D3D12Camera.cpp" />
     <ClCompile Include="D3D12\Bundles\Bundle.cpp" />
     <ClCompile Include="D3D12\Bundles\OriginalBundle.cpp" />
@@ -190,9 +189,9 @@
     <ClCompile Include="Tools\GpuClock.cpp" />
     <ClCompile Include="Tools\Locator.cpp" />
     <ClCompile Include="Tools\SoundManager.cpp" />
+    <ClCompile Include="Tools\SoundStruct.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Box\Box.hpp" />
     <ClInclude Include="Camera\Camera.hpp" />
     <ClInclude Include="D3D12\D3D12Camera.h" />
     <ClInclude Include="D3D12\Bundles\Bundle.h" />
@@ -215,6 +214,7 @@
     <ClInclude Include="Tools\GpuClock.h" />
     <ClInclude Include="Tools\Locator.h" />
     <ClInclude Include="Tools\SoundManager.hpp" />
+    <ClInclude Include="Tools\SoundStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Guides\HowToCommandListsAndBundles.txt" />

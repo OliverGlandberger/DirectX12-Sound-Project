@@ -3,32 +3,31 @@
 
 #include <fmod.hpp>
 #include <string>
-//#include "../../include/D3D/"
+#include "SoundStruct.h"
 
-#define SOUNDS 3
-
-struct SoundStruct {
-	std::string fileName = "";
-	FMOD::Sound *sound = nullptr;
-	FMOD::Channel *channel = nullptr;
-	FMOD_VECTOR Pos{ 0 };
-	FMOD_VECTOR Velocity{ 0 };
-	FMOD_VECTOR Forward{ 0 };
-	FMOD_VECTOR Up{ 0 };
-};
+#define SOUNDS 1
+#define SPEAKERS 2
 
 class SoundManager
 {
 private:
 	FMOD::System *system = nullptr;
-	SoundStruct* listener;
-	SoundStruct* speakers[SOUNDS];
+	SoundStruct* listener = nullptr;
+	SoundStruct* speakers[SOUNDS]{ nullptr };
+	SoundStruct* ambience = nullptr;
+
+	void initializeSpeakers();
+	void initializeSystem();
+
+	void playAllSounds();
+	void playAmbience();
 
 public:
 	SoundManager();
 	~SoundManager();
 
-
+	void panRight();
+	void panLeft();
 
 	void update();
 };

@@ -100,6 +100,12 @@ void run() {
 				cursorMovement
 			);
 
+			if (msg.wParam == 'l') {
+				Locator::getSoundManager()->panLeft();
+			}
+			else if (msg.wParam == 'r') {
+				Locator::getSoundManager()->panRight();
+			}
 		}
 
 		// Update SoundManager

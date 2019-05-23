@@ -11,8 +11,6 @@
 #include "D3D12Sampler2D.h"
 #include "D3D12Texture2D.h"
 
-#include "../Box/Box.hpp"
-
 #include <d3dx12.h>
 #include <dxgi1_6.h>
 
@@ -860,8 +858,6 @@ int D3D12Renderer::initialiseTestbench()
 	m_viewProjConstantBuffer->setData(&viewProj, sizeof(viewProj), PIPELINEINPUT::CB::VIEWPROJ_MATRIX);
 
 	// BOX FOR SOUND PROJECT
-	this->box.initialize();
-	this->box.mesh->technique = m_techniques.at(0);
 
 	// Used to submit/clear each frame, now only submits once.
 	for (auto m : m_scene)
@@ -1006,7 +1002,7 @@ void D3D12Renderer::recordList()
 			for (auto mesh : work.second) {
 				//Set constant buffer descriptor heap (TRANSFORMATIONS)
 				ID3D12DescriptorHeap* descriptorHeaps[] = {
-				mesh->txBuffer->getDescriptorHeap()[backBufferIndex]
+					mesh->txBuffer->getDescriptorHeap()[backBufferIndex]
 				};
 				m_commandList4->SetDescriptorHeaps(ARRAYSIZE(descriptorHeaps), descriptorHeaps);
 			}
@@ -1058,15 +1054,6 @@ void D3D12Renderer::recordList()
 				m_commandList4->DrawInstanced(3, 1, 0, 0); //3 Vertices, 1 triangle, start with vertex 0 and triangle 0
 			}
 		}
-		m_commandList4->SetGraphicsRootSignature(m_rootSignature);
-		m_commandList4->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-		this->box.mesh->bindIAVertexBuffer(0);
-		this->box.mesh->bindIAVertexBuffer(1);
-		this->box.mesh->bindIAVertexBuffer(2);
-		this->box.mesh->technique->enable(this);
-		this->box.mesh->technique->getMaterial()->enable();
-		this->box.mesh->txBuffer->bind();
-		m_commandList4->DrawInstanced(box.vertices, 1, 0, 0);
 
 		/// -------------   CLOSE   ------------- ///
 		stopGpuTimer(m_commandList4, 0);		// Stop

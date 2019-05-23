@@ -23,8 +23,6 @@
 
 #include "../GlobalDefines.h"
 
-#include "../Box/Box.hpp"
-
 #pragma endregion
 LRESULT CALLBACK wndProc2(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam); //Window Proc callback function
 
@@ -173,9 +171,6 @@ public:
 #pragma region publicFunctions
 	D3D12Renderer();
 	~D3D12Renderer();
-
-	// Sound Project Tape
-	Box box;
 
 	//Helper function for syncronization of GPU/CPU
 	void WaitForGpu();
