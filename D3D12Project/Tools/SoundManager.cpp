@@ -133,8 +133,8 @@ SoundManager::SoundManager()
 	this->playAllSounds(initAs<float>(SPEAKERS, new float(0.0f)));
 
 	// Start playing Ambience
-	this->ambience->play(this->system, new float(0.05));
-	ValidityCheck(this->ambience->channel->setMode(FMOD_LOOP_NORMAL));	// Loop ambience
+//	this->ambience->play(this->system, new float(0.05));
+//	ValidityCheck(this->ambience->channel->setMode(FMOD_LOOP_NORMAL));	// Loop ambience
 }
 
 SoundManager::~SoundManager()
@@ -170,6 +170,8 @@ void SoundManager::update()
 	{
 		speakers[i]->updateVolume(listener->Pos);
 	}
+
+	this->speakers[0]->calculateStereoPan(listener);
 
 	// Update the system according to all changes made to channels.
 	this->system->update();

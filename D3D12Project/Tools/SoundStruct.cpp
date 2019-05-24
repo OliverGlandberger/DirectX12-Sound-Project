@@ -1,6 +1,8 @@
 #include "SoundStruct.h"
 #include <iostream>
 
+#define PI 3.14159265359
+
 void ValidityCheck(FMOD_RESULT result) {
 	if (result != FMOD_OK) {
 		throw;
@@ -89,7 +91,42 @@ void SoundStruct::updateVolume(FMOD_VECTOR listenerPos)
 	}
 }
 
-void SoundStruct::calculateStereoPan()
+void SoundStruct::calculateStereoPan(SoundStruct* Listener)
 {
+	/// 2D-Panning, only needs x(right) and z(forward)
+	// Calculate second vector
+	FMOD_VECTOR listenerToSource{0};
+	listenerToSource.x = this->Pos.x - Listener->Pos.x;
+	listenerToSource.z = this->Pos.z - Listener->Pos.z;
+											   
+	// Calculate dotproduct					   
+	float dotProduct = 0;					   
+	dotProduct += listenerToSource.x * Listener->Forward.x;
+	dotProduct += listenerToSource.z * Listener->Forward.z;
 
+	// Calculate angle which indicates scaling of panning
+	float denominator = 0;
+	denominator = abs(listenerToSource) + abs(Listener->Forward);
+	float angle = acos(dotProduct / denominator) * 180 / PI;
+
+	// Calculate how much we want to pan based on the angle and range[0-1]
+	float panFactor = angle / 90; // 90 --> 1, 0-->0
+	float padding = 0.5;
+
+
+	// Calculate vector-relativity to determine left/right (rotate 2nd vector then dot)
+	float sideValue = (Listener->Forward.x*-listenerToSource.z) + (Listener->Forward.z*listenerToSource.x);
+
+	if (sideValue > padding) {		// It is on the left side
+		this->channel->setPan(1 * angle * panFactor);
+		std::cout << "PAN: " << angle * panFactor << " ANGLE: " << angle << "\n";
+	}
+	else if (sideValue < -1*padding) {	// It is on the right side
+		this->channel->setPan(-1 * angle * panFactor);
+		std::cout << "PAN: " << angle * panFactor << " ANGLE: " << angle << "\n";
+	}
+	else{						// It's perpendicular to listeners direction
+		this->channel->setPan(0);
+		std::cout << "PAN: " << 0 << " ANGLE: " << 0 << "\n";
+	}
 }

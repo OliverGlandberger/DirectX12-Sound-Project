@@ -38,7 +38,7 @@ public:
 	// Play the audio with a specific starting volume if we want | Deletes volume for you!
 	void play(FMOD::System *system, float *volume = nullptr);
 	void updateVolume(FMOD_VECTOR listenerPos);
-	void calculateStereoPan();	// Not really implemented
+	void calculateStereoPan(SoundStruct* Listener);	// Not really implemented
 
 
 };
