@@ -35,7 +35,8 @@ public:
 	float baseVolume = 1.0f;	// Fmod default value
 	float distanceFactor = 25.0f;
 
-	void play(FMOD::System *system);
+	// Play the audio with a specific starting volume if we want | Deletes volume for you!
+	void play(FMOD::System *system, float *volume = nullptr);
 	void updateVolume(FMOD_VECTOR listenerPos);
 	void calculateStereoPan();	// Not really implemented
 

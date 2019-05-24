@@ -5,6 +5,28 @@
 #include "../Tools/Locator.h"
 #include <thread>
 
+// Allocates an array of T with Size where every index is equal to pValue
+template<typename T>
+T* *initAs(const int size, T* pValue) {
+	T* *arr = new T*[size];
+	if (pValue == nullptr) {
+		for (size_t i = 0; i < size; i++)
+		{
+			arr[i] = nullptr;
+		}
+	}
+	else {
+		for (size_t i = 0; i < size; i++)
+		{
+			arr[i] = new T(*pValue);
+		}
+	}
+
+	delete pValue;
+	return arr;
+};
+
+
 void SoundManager::initializeSpeakers()
 {
 	speakers[0] = new SoundStruct{
@@ -70,31 +92,18 @@ void SoundManager::initializeSystem()
 	ValidityCheck(this->system->init(512, FMOD_INIT_NORMAL, 0));
 }
 
-void SoundManager::playAllSounds()
+void SoundManager::playAllSounds(float* *pVolumes)
 {
 	for (size_t i = 0; i < SPEAKERS; i++)
 	{
-		speakers[i]->play(this->system);
+		speakers[i]->play(this->system, pVolumes[i]);
 	}
+	delete pVolumes;
 }
 
-void SoundManager::playAmbience()
+void SoundManager::playAmbience(float* *pVolumes)
 {
-	ambience->play(this->system);
-	ValidityCheck(this->system->createStream(	// Stream|Sound
-		ambience->fileName.c_str(),
-		FMOD_2D,
-		nullptr,
-		&ambience->sound
-	));
-	ValidityCheck(this->system->playSound(		// Start Playing
-		ambience->sound,
-		nullptr,
-		false,
-		&ambience->channel
-	));
-	//ValidityCheck(ambience->channel->setMode(FMOD_2D_HEADRELATIVE));
-	ValidityCheck(ambience->channel->setVolume(0.005));
+	ambience->play(this->system, pVolumes[0]);
 }
 
 SoundManager::SoundManager()
@@ -120,67 +129,48 @@ SoundManager::SoundManager()
 		{0, 0, 1}
 	};
 
-
-
 	// Start playing all sounds
-	this->playAllSounds();
-	for (size_t i = 0; i < SPEAKERS; i++)
-	{
-		speakers[i]->channel->setVolume(0);
-	}
+	this->playAllSounds(initAs<float>(SPEAKERS, new float(0.0f)));
 
 	// Start playing Ambience
-//this->playAmbience();
-
+	this->ambience->play(this->system, new float(0.05));
+	ValidityCheck(this->ambience->channel->setMode(FMOD_LOOP_NORMAL));	// Loop ambience
 }
 
 SoundManager::~SoundManager()
 {
+	this->system->close();
+	delete this->listener;
+	delete this->ambience;
 
+	for (size_t i = 0; i < SPEAKERS; i++)
+	{
+		delete speakers[i];
+	}
+	for (size_t i = 0; i < EVENTS; i++)
+	{
+		delete events[i];
+	}
 }
 
 void SoundManager::panRight()
 {
-	//float* mixMatrix = new float[SPEAKERS * (SOUNDS +1)]{
-	//	0, 0,
-	//	0, 0
-	//};
-
-	//int* speakers0 = new int();
-	//int* sounds0 = new int();
-	//*speakers0 = SPEAKERS;
-	//*sounds0 = SOUNDS;
-
-	//speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
-	//FMOD_RESULT res = speakers[0]->channel->setPan(-1.0f);
-	//speakers[0]->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
-//	ValidityCheck(speakers[0]->channel->setPan(1.0f));
-
-	events[1]->play(this->system);
-
-
-	//delete mixMatrix;
+	events[1]->play(this->system, nullptr);
 }
 
 void SoundManager::panLeft()
-{
-//	ValidityCheck(speakers[0]->channel->setPan(-1.0f));
+{	
 	events[0]->play(this->system);
 }
 
 void SoundManager::update()
 {
-	// Update Listener
-	//system->set3DListenerAttributes(0, &listener->Pos, nullptr, nullptr, nullptr);
-//	std::cout << "CAMPOS: " << listener->Pos.x << " " << listener->Pos.y << " " << listener->Pos.z << "\t";
-
-
 	// Update Speakers based on distance to listener
 	for (size_t i = 0; i < SPEAKERS; i++)
 	{
 		speakers[i]->updateVolume(listener->Pos);
 	}
 
-	//FMOD_VECTOR pos = listener->Pos;
+	// Update the system according to all changes made to channels.
 	this->system->update();
 }

@@ -14,7 +14,7 @@ private:
 	XMVECTOR cameraDirection;
 	XMVECTOR m_cameraUp;
 	XMMATRIX m_viewMatrix;
-	// SOUNDMOD
+	// SOUNDMOD | Do not deallocate here!
 	SoundStruct* pListener = nullptr;
 
 	

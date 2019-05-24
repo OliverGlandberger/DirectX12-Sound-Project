@@ -38,12 +38,13 @@ SoundStruct::SoundStruct(std::string fileName, FMOD::Sound * sound, FMOD::Channe
 
 SoundStruct::~SoundStruct()
 {
-
+	//delete this->sound;
+//	delete this->channel;
 }
 
 
 
-void SoundStruct::play(FMOD::System *system)
+void SoundStruct::play(FMOD::System *system, float *volume)
 {
 	FMOD_RESULT result;
 	ValidityCheck(system->createStream(	// Stream|Sound
@@ -52,16 +53,20 @@ void SoundStruct::play(FMOD::System *system)
 		nullptr,
 		&this->sound
 	));
-	ValidityCheck(system->playSound(		// Start Playing
+	ValidityCheck(system->playSound(	// Start Playing
 		this->sound,
 		nullptr,
 		false,
 		&this->channel
 	));
-	//ValidityCheck(this->channel->set3DAttributes(	// Set basic Attributes
-	//	&this->Pos,
-	//	&this->Velocity
-	//));
+	if (volume != nullptr) {			// Set specific starting volume, if we want
+		ValidityCheck(this->channel->setVolume(*volume));
+	}
+	else {
+		ValidityCheck(this->channel->setVolume(this->baseVolume));
+	}
+
+	delete volume;
 }
 
 void SoundStruct::updateVolume(FMOD_VECTOR listenerPos)
@@ -77,13 +82,11 @@ void SoundStruct::updateVolume(FMOD_VECTOR listenerPos)
 
 	// Change current volume based on logarithmic math
 	if ((baseVolume / (distance * distanceFactor)) > 1) {
-		this->channel->setVolume(1);
+		ValidityCheck(this->channel->setVolume(1));
 	}
 	else {
-		this->channel->setVolume(baseVolume / (distance * distanceFactor));
+		ValidityCheck(this->channel->setVolume(baseVolume / (distance * distanceFactor)));
 	}
-
-
 }
 
 void SoundStruct::calculateStereoPan()

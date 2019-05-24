@@ -1152,6 +1152,7 @@ int D3D12Renderer::shutdown()
 	SafeRelease(&m_commandList4);
 	SafeRelease(&m_swapChain4);
 	SafeRelease(&m_queryHeap);
+	delete m_camera;
 
 	SafeRelease(&m_fence);
 
