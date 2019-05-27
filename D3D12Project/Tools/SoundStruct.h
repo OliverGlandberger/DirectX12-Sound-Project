@@ -9,6 +9,7 @@ void ValidityCheck(FMOD_RESULT result);
 class SoundStruct {
 private:
 	float abs(FMOD_VECTOR vector);
+	float getAngle(SoundStruct* listener);
 
 public:
 	// Constructors
@@ -38,7 +39,8 @@ public:
 	// Play the audio with a specific starting volume if we want | Deletes volume for you!
 	void play(FMOD::System *system, float *volume = nullptr);
 	void updateVolume(FMOD_VECTOR listenerPos);
-	void calculateStereoPan(SoundStruct* Listener);	// Not really implemented
+	void calculateStereoPan(SoundStruct* Listener);	
+	void testPan(SoundStruct* Listener);
 
 
 };

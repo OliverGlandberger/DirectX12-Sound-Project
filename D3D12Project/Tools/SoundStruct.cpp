@@ -22,6 +22,27 @@ float SoundStruct::abs(FMOD_VECTOR vector)
 	return total;
 }
 
+float SoundStruct::getAngle(SoundStruct* Listener)
+{
+	/// 2D-Panning, only needs x(right) and z(forward)
+// Calculate second vector
+	FMOD_VECTOR listenerToSource{ 0 };
+	listenerToSource.x = this->Pos.x - Listener->Pos.x;
+	listenerToSource.z = this->Pos.z - Listener->Pos.z;
+
+	// Calculate dotproduct					   
+	float dotProduct = 0;
+	dotProduct += listenerToSource.x * Listener->Forward.x;
+	dotProduct += listenerToSource.z * Listener->Forward.z;
+
+	// Calculate angle which indicates scaling of panning
+	float denominator = 0;
+	denominator = abs(listenerToSource) + abs(Listener->Forward);
+	float angle = acos(dotProduct / denominator) * 180 / PI;
+
+	return angle;
+}
+
 SoundStruct::SoundStruct(bool listener)
 {
 	// Do nothing in particular
@@ -110,23 +131,50 @@ void SoundStruct::calculateStereoPan(SoundStruct* Listener)
 	float angle = acos(dotProduct / denominator) * 180 / PI;
 
 	// Calculate how much we want to pan based on the angle and range[0-1]
-	float panFactor = angle / 90; // 90 --> 1, 0-->0
-	float padding = 0.5;
+	float panFactor = angle / 180; // 90 --> 1, 0-->0
+	float padding = 0.2;
 
 
 	// Calculate vector-relativity to determine left/right (rotate 2nd vector then dot)
 	float sideValue = (Listener->Forward.x*-listenerToSource.z) + (Listener->Forward.z*listenerToSource.x);
-
+	
 	if (sideValue > padding) {		// It is on the left side
 		this->channel->setPan(1 * angle * panFactor);
 		std::cout << "PAN: " << angle * panFactor << " ANGLE: " << angle << "\n";
 	}
 	else if (sideValue < -1*padding) {	// It is on the right side
 		this->channel->setPan(-1 * angle * panFactor);
-		std::cout << "PAN: " << angle * panFactor << " ANGLE: " << angle << "\n";
+		std::cout << "PAN: " << -1 * angle * panFactor << " ANGLE: " << angle << "\n";
 	}
 	else{						// It's perpendicular to listeners direction
 		this->channel->setPan(0);
-		std::cout << "PAN: " << 0 << " ANGLE: " << 0 << "\n";
+		std::cout << "PAN: " << 0 << " ANGLE: " << angle << "\n";
 	}
+}
+
+void SoundStruct::testPan(SoundStruct * Listener)
+{
+	float angle = getAngle(Listener);
+
+	float* mixMatrix = new float[2 * (1)]{	// 2 speakers * (whereamigoing)
+		0,
+		0
+	};
+	
+	int* speakers0 = new int();
+	int* sounds0 = new int();
+	*speakers0 = 2;
+	*sounds0 = 2;
+
+	this->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
+	//this->channel->setPan(-1.0f);
+	this->channel->getMixMatrix(mixMatrix, speakers0, sounds0);
+
+	std::cout << "1st: " << mixMatrix[0] << " 2nd: " << mixMatrix[1] << "\n";
+	
+	//ValidityCheck(this->channel->setPan(1.0f));
+
+	delete mixMatrix;
+	delete speakers0;
+	delete sounds0;
 }

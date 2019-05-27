@@ -82,7 +82,7 @@ void SoundManager::initializeSystem()
 {
 	ValidityCheck(FMOD::System_Create(&system));
 
-	// Disable automatic stereo panning
+	// Enable SetPan as using Constant Power Panning
 	ValidityCheck(system->setSoftwareFormat(191000, FMOD_SPEAKERMODE_STEREO, 2));
 
 	// Set distance scaling for clearer stereo panning
@@ -133,8 +133,8 @@ SoundManager::SoundManager()
 	this->playAllSounds(initAs<float>(SPEAKERS, new float(0.0f)));
 
 	// Start playing Ambience
-//	this->ambience->play(this->system, new float(0.05));
-//	ValidityCheck(this->ambience->channel->setMode(FMOD_LOOP_NORMAL));	// Loop ambience
+	this->ambience->play(this->system, new float(0.05));
+	ValidityCheck(this->ambience->channel->setMode(FMOD_LOOP_NORMAL));	// Loop ambience
 }
 
 SoundManager::~SoundManager()
@@ -155,12 +155,14 @@ SoundManager::~SoundManager()
 
 void SoundManager::panRight()
 {
-	events[1]->play(this->system, nullptr);
+	//events[1]->play(this->system, nullptr);
+	this->speakers[0]->channel->setPan(1);
 }
 
 void SoundManager::panLeft()
 {	
-	events[0]->play(this->system);
+	//events[0]->play(this->system);
+	this->speakers[0]->channel->setPan(-1);
 }
 
 void SoundManager::update()
@@ -171,7 +173,8 @@ void SoundManager::update()
 		speakers[i]->updateVolume(listener->Pos);
 	}
 
-	this->speakers[0]->calculateStereoPan(listener);
+	//this->speakers[0]->calculateStereoPan(listener);
+	//this->speakers[0]->testPan(listener);
 
 	// Update the system according to all changes made to channels.
 	this->system->update();
