@@ -6,7 +6,7 @@
 #include "SoundStruct.h"
 
 #define EVENTS 2
-#define SPEAKERS 1	// These are speakers IN-GAME
+#define SPEAKERS 3	// These are speakers IN-GAME
 
 // Allocates an array of T with Size where every index is equal to pValue
 template<typename T>
