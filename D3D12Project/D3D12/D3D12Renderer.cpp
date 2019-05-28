@@ -668,7 +668,6 @@ D3D12Renderer::D3D12Renderer() {
 
 	XMMATRIX* fuckyou = worldMatrices;
 	Locator::provide(&fuckyou);
-	
 
 	for (int i = 0; i < BACKBUFFERCOUNT; i++) {
 		m_commandAllocators[i] = nullptr;

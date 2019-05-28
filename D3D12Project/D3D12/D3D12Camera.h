@@ -9,7 +9,6 @@ using namespace DirectX;
 class D3D12Camera {
 private:
 	//View
-	XMVECTOR m_cameraPos;
 	XMVECTOR cameraDirection;
 	XMVECTOR m_cameraUp;
 	XMMATRIX m_viewMatrix;
@@ -38,6 +37,8 @@ private:
 public:
 	D3D12Camera();
 	~D3D12Camera();
+
+	XMVECTOR m_cameraPos;
 
 	void MoveCameraLeft();
 	void MoveCameraRight();

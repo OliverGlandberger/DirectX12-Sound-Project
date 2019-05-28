@@ -13,6 +13,7 @@
 #include "Tools/Locator.h"
 
 /// SOUND
+#include "../D3D12Project/Tools/Sound.hpp"
 
 /// MEMORY LEAKS
 #include <crtdbg.h>
@@ -83,6 +84,9 @@ void run() {
 	POINT cursorMovement = { 0, 0 };
 	D3D12Camera *camera = Locator::getCamera();
 
+	//Sound
+	Sound soundManager;
+
 	// RENDER LOOP: Entry Point
 	while (WM_QUIT != msg.message && !(msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)) {
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -107,8 +111,7 @@ void run() {
 			}
 		}
 
-		// Update SoundManager
-		// -------------------------------------------------------
+		soundManager.update();
 
 		//Record benchmarks
 		if (!recording && benchmarkCounter < doThisManyBenchmarkRecordings) {
@@ -204,8 +207,6 @@ int main(int argc, char *argv[])
 	//Delta time recording
 	Benchmark* benchmark = new Benchmark;
 	Locator::provide(&benchmark);
-
-	//Sound Manager
 
 	// ------  MODIFIED  ------ 
 	renderer = D3D12Renderer::makeRenderer();
