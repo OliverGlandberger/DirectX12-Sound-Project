@@ -21,7 +21,6 @@ D3D12Camera::D3D12Camera() {
 
 	m_trigAngle = 0.0f;
 
-	pListener = Locator::getListener();
 }
 
 D3D12Camera::~D3D12Camera() {
@@ -94,27 +93,7 @@ void D3D12Camera::UpdateCamera(
 		XMStoreFloat3(&camupOutput, m_cameraUp);
 		XMStoreFloat3(&camdirOutput, cameraDirection);
 
-		pListener->Pos.x = camposOutput.x;
-		pListener->Pos.y = camposOutput.y;
-		pListener->Pos.z = camposOutput.z;
-		pListener->Up.x = camupOutput.x;
-		pListener->Up.y = camupOutput.y;
-		pListener->Up.z = camupOutput.z;
-		pListener->Forward.x = camdirOutput.x;
-		pListener->Forward.y = camdirOutput.y;
-		pListener->Forward.z = camdirOutput.z;
-		pListener->Velocity.x = this->CameraMovementSpeed * pListener->Forward.x;
-		pListener->Velocity.y = this->CameraMovementSpeed * pListener->Forward.y;
-		pListener->Velocity.z = this->CameraMovementSpeed * pListener->Forward.z;
-
-		// ADAPTED FOR D3D12
-		//this->m_viewMatrix = UnformattedViewMatrix;
-		
-
-		// Debug Output
-		//std::cout << "CAMPOS: " << camposOutput.x << " " << camposOutput.y << " " << camposOutput.z << "\t";		
-		//std::cout << "UP: " << camupOutput.x << " " << camupOutput.y << " " << camupOutput.z << "\t";
-		//std::cout << "LOOK: " << camdirOutput.x << " " << camdirOutput.y << " " << camdirOutput.z << "\n";*/
+		// maybe update pointer to soundmanagers variable here, based on cameras position/direction
 	}
 }
 

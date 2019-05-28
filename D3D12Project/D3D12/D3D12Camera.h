@@ -3,7 +3,6 @@
 #include <DirectXMath.h>
 
 #include "D3D12ConstantBuffer.h"
-#include "../Tools/SoundManager.hpp"
 
 using namespace DirectX;
 
@@ -14,8 +13,7 @@ private:
 	XMVECTOR cameraDirection;
 	XMVECTOR m_cameraUp;
 	XMMATRIX m_viewMatrix;
-	// SOUNDMOD | Do not deallocate here!
-	SoundStruct* pListener = nullptr;
+//	Might have a pointer to a variable in the sound manager here
 
 	
 

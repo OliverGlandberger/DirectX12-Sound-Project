@@ -13,7 +13,6 @@
 #include "Tools/Locator.h"
 
 /// SOUND
-#include "Tools/SoundManager.hpp"
 
 /// MEMORY LEAKS
 #include <crtdbg.h>
@@ -101,15 +100,15 @@ void run() {
 			);
 
 			if (msg.wParam == 'l') {
-				Locator::getSoundManager()->panLeft();
+				
 			}
 			else if (msg.wParam == 'r') {
-				Locator::getSoundManager()->panRight();
+				
 			}
 		}
 
 		// Update SoundManager
-		Locator::getSoundManager()->update();
+		// -------------------------------------------------------
 
 		//Record benchmarks
 		if (!recording && benchmarkCounter < doThisManyBenchmarkRecordings) {
@@ -207,8 +206,6 @@ int main(int argc, char *argv[])
 	Locator::provide(&benchmark);
 
 	//Sound Manager
-	SoundManager* soundManager = new SoundManager();
-	Locator::provide(&soundManager);
 
 	// ------  MODIFIED  ------ 
 	renderer = D3D12Renderer::makeRenderer();
@@ -221,7 +218,6 @@ int main(int argc, char *argv[])
 	run();
 	renderer->shutdown();
 	delete benchmark;
-	delete soundManager;
 	delete renderer;
 
 	return 0;

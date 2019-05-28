@@ -3,7 +3,6 @@
 #include "../D3D12/D3D12Renderer.h"
 #include "Benchmark.h"
 #include <d3dcompiler.h>
-#include "SoundManager.hpp"
 #include "../D3D12/D3D12Camera.h"
 
 #include <dxgi1_6.h>
@@ -39,9 +38,7 @@ private:
 	static ID3D12CommandAllocator** gCommandAllocator;
 	static ID3D12CommandQueue** gCommandQueue;
 	static Benchmark** m_benchmark;
-	static SoundManager** m_soundManager;
 	static D3D12Camera** m_camera;
-	static SoundStruct** m_listener;
 	static DirectX::XMMATRIX** m_worldMatrices;
 
 public:
@@ -72,16 +69,8 @@ public:
 		m_benchmark = benchmark;
 	}
 
-	static void provide(SoundManager** soundManager) {
-		m_soundManager = soundManager;
-	}
-
 	static void provide(D3D12Camera** camera) {
 		m_camera = camera;
-	}
-
-	static void provide(SoundStruct** listener) {
-		m_listener = listener;
 	}
 
 	static void provide(DirectX::XMMATRIX** worldMatrices) {
@@ -110,14 +99,8 @@ public:
 	static Benchmark* getBenchmark() {
 		return *m_benchmark;
 	}
-	static SoundManager* getSoundManager() {
-		return *m_soundManager;
-	}
 	static D3D12Camera* getCamera() {
 		return *m_camera;
-	}
-	static SoundStruct* getListener() {
-		return *m_listener;
 	}
 	static DirectX::XMMATRIX* getWorldMatrices() {
 		return *m_worldMatrices;

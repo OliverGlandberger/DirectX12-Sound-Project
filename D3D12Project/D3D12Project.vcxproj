@@ -188,8 +188,6 @@
     <ClCompile Include="Tools\Benchmark.cpp" />
     <ClCompile Include="Tools\GpuClock.cpp" />
     <ClCompile Include="Tools\Locator.cpp" />
-    <ClCompile Include="Tools\SoundManager.cpp" />
-    <ClCompile Include="Tools\SoundStruct.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.hpp" />
@@ -213,8 +211,6 @@
     <ClInclude Include="Tools\Benchmark.h" />
     <ClInclude Include="Tools\GpuClock.h" />
     <ClInclude Include="Tools\Locator.h" />
-    <ClInclude Include="Tools\SoundManager.hpp" />
-    <ClInclude Include="Tools\SoundStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Guides\HowToCommandListsAndBundles.txt" />
