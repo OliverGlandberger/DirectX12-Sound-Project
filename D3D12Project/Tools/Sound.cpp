@@ -93,7 +93,7 @@ void Sound::update()
 
 		this->tempVectorDistance = this->calcVectorDist(this->soundDistance);
 
-		this->soundChan[i]->setVolume(1.0f/(tempVectorDistance * 60.0f));
+		this->soundChan[i]->setVolume(1.0f/(tempVectorDistance * 30.0f));
 	}
 
 	this->soundSystem->update();

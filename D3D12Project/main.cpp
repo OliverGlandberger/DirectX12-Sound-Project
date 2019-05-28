@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 
 	// ------  MODIFIED  ------ 
 	renderer = D3D12Renderer::makeRenderer();
-	renderer->initialize(800, 600);
+	renderer->initialize(1920, 1080);
 	renderer->setWinTitle("Direct3D 12");
 	renderer->setClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 
